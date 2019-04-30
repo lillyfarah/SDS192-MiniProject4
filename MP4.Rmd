@@ -1,0 +1,27 @@
+---
+title: "MP4"
+output:
+  html_document:
+    code_folding: hide
+---
+
+```{r, message = FALSE, echo = TRUE}
+
+library(tidyverse)
+library(RMySQL)
+
+db <- dbConnect(MySQL(), 
+                host = "scidb.smith.edu", 
+                user = "mth292", 
+                password = "RememberPi", 
+                dbname = "imdb")
+knitr::opts_chunk$set(connection = db, max.print = 20)
+
+```
+
+```{sql, connection=db}
+
+SHOW DATABASES;
+
+```
+
