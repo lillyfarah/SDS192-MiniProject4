@@ -21,7 +21,12 @@ knitr::opts_chunk$set(connection = db, max.print = 20)
 
 ```{sql, connection=db}
 
-
+SELECT *
+FROM movie_info
+LEFT JOIN info_type ON movie_info.info_type_id = info_type.id
+LEFT JOIN title ON movie_info.movie_id = title.id
+WHERE movie_info.info_type_id = '105'
+AND movie_info.info LIKE '%$%'
 
 ```
 
