@@ -21,7 +21,7 @@ knitr::opts_chunk$set(connection = db, max.print = 20)
 
 ```{sql, connection=db}
 
-SHOW DATABASES;
+
 
 ```
 
