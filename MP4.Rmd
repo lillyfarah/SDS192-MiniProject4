@@ -35,3 +35,13 @@ OR info LIKE '%(29 June 2010)' OR info LIKE '%$192,769,854%' OR info LIKE '%$281
 
 ```
 
+```{sql, connection=db}
+SELECT title AS 'Movie', production_year AS 'Production Year', info AS 'Budget'
+FROM movie_info
+RIGHT JOIN title ON movie_info.movie_id = title.id
+WHERE movie_info.info_type_id = '105'
+AND (movie_id = '2969942' or movie_id = '4368658' or movie_id = '4368665' or movie_id = '4368666'
+or movie_id = '3518460' or movie_id = '3754229' or movie_id = '3270236' or movie_id = '4368646'
+or movie_id = '4490027' or movie_id = '4436841' or movie_id = '4436842' or movie_id = '4436846' or movie_id = '4436851')
+```
+
