@@ -37,9 +37,24 @@ or movie_id = '3518460' or movie_id = '3754229' or movie_id = '3270236' or movie
 or movie_id = '4490027' or movie_id = '4436841' or movie_id = '4436842' or movie_id = '4436846' or movie_id = '4436851')
 ```
 
+<<<<<<< HEAD
 The general trend upward may be caused by the success of previous movies within the genre. Also, within each series, the budgets increased for each successive film. From this information, it seems as though all of the movies became more successful as there were more sequels produced. “Twilight” started the boom of YA movie adaptations with a budget of under $50 million. The success of the first movie of the franchise correlates with the higher budget of the second movie, and an increase in budget for each movie made after. The last movie in the series, “The Twilight Saga: Breaking Dawn - Part 2”, has a budget that is higher than the first “Hunger Games” movie, which was made in the same year. This agrees with our intuition because “Twilight” was an established franchise, while the “Hunger Games” franchise was just testing the waters of the film industry. With this in mind, we can also see that “The Hunger Games” had a larger budget than the first three “Twilight” movies. The investors may have seen the success of the “Twilight Saga” and realized that this genre of movie does well with the general public. Trends also show that the “Hunger Games” movies had the largest budgets, which may correlate to their immense popularity as novels by [Suzanne Collins](https://en.wikipedia.org/wiki/Suzanne_Collins). The “Divergent” series had budgets within the same range as the “Hunger Games”, which is expected considering the success of the previous two YA movie franchises and the increased interest and production of the YA film series.
 
 ```{sql, output.var = "gross"}
+=======
+```{sql, output.var = "budget", message = FALSE}
+SELECT title AS movie, production_year, REPLACE(SUBSTRING(info FROM 2), ',', '') AS budgetnum
+FROM movie_info
+RIGHT JOIN title ON movie_info.movie_id = title.id
+WHERE movie_info.info_type_id = '105'
+AND (movie_id = '2969942' or movie_id = '4368658' or movie_id = '4368665' or movie_id = '4368666'
+or movie_id = '3518460' or movie_id = '3754229' or movie_id = '3270236' or movie_id = '4368646'
+or movie_id = '4490027' or movie_id = '4436841' or movie_id = '4436842' or movie_id = '4436846' or movie_id = '4436851')
+```
+
+```{sql, output.var = "gross", message = FALSE}
+
+>>>>>>> 8d222bebe24cd95c8322ec40c0170ea81e66eae0
 SELECT title AS movie, production_year, REPLACE(REPLACE(SUBSTRING(info FROM 2 FOR 11), ',', ''), ' ', '') AS grossing
 FROM movie_info
 RIGHT JOIN title ON movie_info.movie_id = title.id
@@ -70,8 +85,32 @@ ggplot(gross, aes(x = production_year, y = grossing, label = movie)) +
   labs(title = "Grossing of Popular YA Series", y = "Gross (in millions)", x = "Production Year", caption = "Source: IMDB")
 ```
 
+<<<<<<< HEAD
 This was not what we expected to see as a trend. The most obvious feature of the graph is the steep decline in gross for the later movies produced. In the years between 2008 and 2013, the gross trend line has an increasing slope, which represents the increase in popularity and interest in the movie franchises and the YA genre of movies. After 2013, there is a sharp decline in gross numbers, with “Allegiant” grossing less than $100 million. The “Hunger Games” did well with the first two movies, “The Hunger Games” and “The Hunger Games: Catching Fire”, but the two parts of the final movie were not as successful and show the start of the genre’s decline in popularity and prosperity. The “Divergent” series was still produced, though the hopes of large profits were not as extensive as those of the previous series. The decrease in gross of the “Divergent” movies joined the trend of decreasing popularity of the YA movie adaptations.
 
 Despite the prevalence and success of these young adult movies in the past, there haven’t been any movies released of the same caliber in the past years. Given the trend seen with the these franchises, especially with the “Divergent” series, this may be because the movies starting grossing less and less, even if the budgets were higher. The “Divergent” series, while a popular book series, was cut short, and the last movie in the series was never made. This may have been a sign to other filmmakers that this genre was not as profitable as others. The few blockbusters marketed at a young adult audience in the past few years may be due to the “Divergent” series’ underperformance and the decreasing grossing of “The Hunger Games” series.
 
 From these two comparisons, we have coined a new term that refers to an era of time, called the “YA Movie Boom”, which lasted a total of about 8 years, with a peak in 2012. It will be interesting to see how this genre continues in the future, especially with the recent increase in the Marvel franchise, which has surpassed these series’ at the box office. What will be the next big movie genre to climb the charts? 
+=======
+```{r, message = FALSE, warning=FALSE}
+budget <- budget %>% 
+  mutate(budgetnum = as.numeric(budgetnum) / 1000000) %>%
+  mutate(series = ifelse(grepl("Twilight", movie), "Twilight", ifelse(grepl("Hunger", movie), "The Hunger Games", "Divergent")))
+
+gross <- mutate(gross, grossing = as.numeric(grossing) / 1000000) %>%
+  mutate(series = ifelse(grepl("Twilight", movie), "Twilight", ifelse(grepl("Hunger", movie), "The Hunger Games", "Divergent")))
+
+ggplot(budget, aes(x = production_year, y = budgetnum, label = movie)) +
+  geom_point() +
+  geom_smooth(color = "magenta") +
+  geom_label_repel(alpha = .7, aes(color = series)) +
+  labs(title = "Budget of Popular YA Series", y = "Budget (in millions)", x = "Production Year", caption = "Source: IMDb", color = "Series")
+
+ggplot(gross, aes(x = production_year, y = grossing, label = movie)) +
+  geom_point() +
+  geom_smooth(color = "magenta") +
+  geom_label_repel(alpha = .7, aes(color = series)) +
+  labs(title = "Grossing of Popular YA Series", y = "Gross (in millions)", x = "Production Year", caption = "Source: IMDb", color = "Series")
+```
+
+>>>>>>> 8d222bebe24cd95c8322ec40c0170ea81e66eae0
