@@ -10,6 +10,7 @@ output:
 ```{r, message = FALSE, echo = TRUE}
 
 library(tidyverse)
+library(ggrepel)
 library(RMySQL)
 
 db <- dbConnect(MySQL(), 
@@ -21,9 +22,19 @@ knitr::opts_chunk$set(connection = db, max.print = 20)
 
 ```
 
-```{sql, connection=db}
+```{sql, output.var = "budget"}
+SELECT title AS movie, production_year, REPLACE(SUBSTRING(info FROM 2), ',', '') AS budgetnum
+FROM movie_info
+RIGHT JOIN title ON movie_info.movie_id = title.id
+WHERE movie_info.info_type_id = '105'
+AND (movie_id = '2969942' or movie_id = '4368658' or movie_id = '4368665' or movie_id = '4368666'
+or movie_id = '3518460' or movie_id = '3754229' or movie_id = '3270236' or movie_id = '4368646'
+or movie_id = '4490027' or movie_id = '4436841' or movie_id = '4436842' or movie_id = '4436846' or movie_id = '4436851')
+```
 
-SELECT title AS 'Movie', production_year AS 'Production Year', info AS 'Gross'
+```{sql, output.var = "gross"}
+
+SELECT title AS movie, production_year, REPLACE(REPLACE(SUBSTRING(info FROM 2 FOR 11), ',', ''), ' ', '') AS grossing
 FROM movie_info
 RIGHT JOIN title ON movie_info.movie_id = title.id
 WHERE movie_info.info_type_id = '107'
@@ -35,13 +46,23 @@ OR info LIKE '%(29 June 2010)' OR info LIKE '%$192,769,854%' OR info LIKE '%$281
 
 ```
 
-```{sql, connection=db}
-SELECT title AS 'Movie', production_year AS 'Production Year', info AS 'Budget'
-FROM movie_info
-RIGHT JOIN title ON movie_info.movie_id = title.id
-WHERE movie_info.info_type_id = '105'
-AND (movie_id = '2969942' or movie_id = '4368658' or movie_id = '4368665' or movie_id = '4368666'
-or movie_id = '3518460' or movie_id = '3754229' or movie_id = '3270236' or movie_id = '4368646'
-or movie_id = '4490027' or movie_id = '4436841' or movie_id = '4436842' or movie_id = '4436846' or movie_id = '4436851')
+```{r, message = FALSE}
+budget <- budget %>% 
+  mutate(budgetnum = as.numeric(budgetnum) / 1000000) %>%
+  mutate()
+
+gross <- mutate(gross, grossing = as.numeric(grossing) / 1000000)
+
+ggplot(budget, aes(x = production_year, y = budgetnum, label = movie)) +
+  geom_point() +
+  geom_smooth() +
+  geom_label_repel(alpha = .7) +
+  labs(title = "Budget of Popular YA Series", y = "Budget (in millions)", x = "Production Year", caption = "Source: IMDB")
+
+ggplot(gross, aes(x = production_year, y = grossing, label = movie)) +
+  geom_point() +
+  geom_smooth() +
+  geom_label_repel(alpha = .7) +
+  labs(title = "Grossing of Popular YA Series", y = "Gross (in millions)", x = "Production Year", caption = "Source: IMDB")
 ```
 
