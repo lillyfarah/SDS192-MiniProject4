@@ -1,5 +1,5 @@
 ---
-title: "From Books to Movies: The "
+title: "From Books to Movies: The Development of YA Series"
 author: Olivia DeMeo and Lilly Farah
 date: May 9, 2019 at 11:55 PM
 output:
@@ -34,4 +34,10 @@ AND (info LIKE '%(USA)' OR info LIKE '%(22 May 2016)' OR info LIKE '%(21 October
 OR info LIKE '%(29 June 2010)' OR info LIKE '%$192,769,854%' OR info LIKE '%$281,287,133%' OR info LIKE '%(3 March 2013)')
 
 ```
+
+```{sql, connection=db}
+
+
+```
+
 
